@@ -3,6 +3,7 @@
 #include "i2c.h"
 #include "gpio_spi.h"
 #include "oled.h"
+#include "spi_flash.h"
 
 unsigned char at24cxx_read(unsigned char address);
 void at24cxx_write(unsigned char address, unsigned char data);
@@ -15,13 +16,20 @@ int main()
     int i;
 	int address;
 	int data;
-    
+    unsigned int mid, pid;
+	
     uart0_init();   // 波特率115200，8N1(8个数据位，无校验位，1个停止位)
 
 	SPIInit();
 	OLEDInit();
 	OLEDPrint(0, 0, "Hello World SPI!");
-	
+
+	SPIFlashReadID(&mid, &pid);
+	printf("SPI FLASH : Mid = 0x%2x, Pid = 0x%2x\n\r", mid, pid);
+
+	sprintf(str, "SPI FLASH: %2x,%2x", mid, pid);
+	OLEDPrint(2, 0, str);
+
     i2c_init();
     
     while (1)

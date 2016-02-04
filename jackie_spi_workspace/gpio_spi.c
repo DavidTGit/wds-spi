@@ -45,6 +45,16 @@ void SPISetDO(char val)
 	
 }
 
+static char SPIGetDI(void)
+{
+	// GPG5
+	if (GPGDAT & (1 << 5))
+		return 1;
+	else
+		return 0;
+	
+}
+
 void SPISendByte(unsigned char val)
 {
 	int i;
@@ -57,6 +67,22 @@ void SPISendByte(unsigned char val)
 		val <<= 1;
 	}
 	
+}
+
+unsigned char SPIReceiveByte(void)
+{
+	int i;
+	unsigned char val = 0;
+	
+	for ( i = 0; i < 8; i++)
+	{
+	    val <<= 1;
+		SPISetCLK(0);
+		if (SPIGetDI())
+			val |= 1;
+		SPISetCLK(1);
+	}
+	return val;
 }
 
 

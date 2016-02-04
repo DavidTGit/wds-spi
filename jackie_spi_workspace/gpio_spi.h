@@ -4,5 +4,6 @@
 void SPI_GPIO_Init(void);
 void SPIInit(void);
 void SPISendByte(unsigned char val);
+unsigned char SPIReceiveByte(void);
 
 #endif
